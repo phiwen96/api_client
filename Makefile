@@ -1,6 +1,6 @@
 CXX := clang++
 CXX_FLAGS = -std=c++2a -stdlib=libc++ -fmodules-ts -fmodules -fbuiltin-module-map -fimplicit-modules -fimplicit-module-maps -fprebuilt-module-path=.
-
+INCLUDE_NLOHMANN := -I/opt/homebrew/Cellar/nlohmann-json/3.10.5/include
 
 PROJ_DIR := $(CURDIR)
 BUILD_DIR := $(PROJ_DIR)/build
@@ -23,7 +23,7 @@ $(MAIN): $(OBJ_DIR)/main.o $(MODULES)
 	$(CXX) $(CXX_FLAGS) $(OBJ_DIR)/main.o -o $@
 
 $(OBJ_DIR)/main.o: $(PROJ_DIR)/main.cpp $(OBJ_DIR)/Client.pcm
-	$(CXX) $(CXX_FLAGS) $(addprefix -fmodule-file=, $(filter-out $<, $^)) -c $< -o $@
+	$(CXX) $(CXX_FLAGS) $(addprefix -fmodule-file=, $(filter-out $<, $^)) -c $< -o $@ $(INCLUDE_NLOHMANN)
 
 $(OBJ_DIR)/Client.pcm: $(MODULES_DIR)/Client.cpp
 	$(CXX) $(CXX_FLAGS) $(addprefix -fmodule-file=, $(filter-out $<, $^)) -c $< -Xclang -emit-module-interface -o $@
